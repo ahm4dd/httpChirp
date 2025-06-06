@@ -18,6 +18,8 @@ app.get("/healthz", handlerReadiness);
 app.get("/metrics", handlerMetrics);
 app.get("/reset", (req: Request, res: Response) => {
   config.fileserverHits = 0;
+  res.send();
+  res.end();
 });
 app.use(middlewareLogResponses);
 
