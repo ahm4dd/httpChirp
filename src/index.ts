@@ -6,6 +6,7 @@ import {
 } from "./api/middlewares.js";
 import { handlerMetrics } from "./admin/metrics.js";
 import { handlerReset } from "./admin/reset.js";
+import { handlerValidateChirp } from "./api/validateChirp.js";
 
 const app = express();
 const PORT = 8080;
@@ -15,6 +16,7 @@ app.get("/admin/metrics", handlerMetrics);
 app.get("/api/healthz", handlerReadiness);
 //app.get("/admin/metrics");
 app.post("/admin/reset", handlerReset);
+app.post("/api/validate_chirp", handlerValidateChirp);
 app.use(middlewareLogResponses);
 
 app.listen(PORT, () => {
