@@ -1,6 +1,4 @@
 import { Response, Request } from "express";
-import express from "express";
-import { parse } from "path";
 export async function handlerValidateChirp(req: Request, res: Response) {
   type parameters = {
     body: string;
@@ -10,7 +8,18 @@ export async function handlerValidateChirp(req: Request, res: Response) {
     res.status(400).send(JSON.stringify({ error: "Chirp is too long" }));
     res.end();
   } else {
-    res.status(200).send(JSON.stringify({ valid: true }));
+    params.body = params.body.trim();
+    let profane: string[] = ["kerfuffle", "sharbert", "fornax"];
+    let filteredWords: string[] = [];
+    for (const word of params.body.split(" ")) {
+      if (profane.includes(word.toLowerCase())) {
+        let asterisks = "*".repeat(4);
+        filteredWords.push(asterisks);
+      } else filteredWords.push(word);
+    }
+    res
+      .status(200)
+      .send(JSON.stringify({ cleanedBody: filteredWords.join(" ") }));
     res.end();
   }
 }
