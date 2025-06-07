@@ -6,6 +6,7 @@ import { handlerReset } from "./admin/reset.js";
 import { handlerValidateChirp } from "./api/validateChirp.js";
 const app = express();
 const PORT = 8080;
+app.use(express.json());
 app.use("/app", middlewareMetricsInc, express.static("./src/app"));
 app.get("/admin/metrics", handlerMetrics);
 app.get("/api/healthz", handlerReadiness);
