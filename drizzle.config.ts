@@ -1,5 +1,5 @@
 import { defineConfig } from "drizzle-kit";
-process.loadEnvFile("./credientials.env");
+process.loadEnvFile();
 export default defineConfig({
   schema: "src/db/schema.ts",
   out: "src/db/drizzle",

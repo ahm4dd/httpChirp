@@ -1,5 +1,5 @@
 import process from "process";
-process.loadEnvFile("./../credientials.env");
+process.loadEnvFile();
 type APIConfig = {
   fileserverHits: number;
   dbURL: string;
