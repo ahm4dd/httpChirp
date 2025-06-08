@@ -1,8 +1,9 @@
+import { ValidationError } from "./../errors.js";
 export async function handlerValidateChirp(req, res, next) {
     try {
         const params = req.body;
         if (params.body.length > 140) {
-            throw Error();
+            throw new ValidationError("Chirp is too long. Max length is 140");
         }
         else {
             params.body = params.body.trim();

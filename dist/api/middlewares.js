@@ -1,4 +1,5 @@
 import { config } from "./../config.js";
+import { ValidationError } from "./../errors.js";
 export function middlewareLogResponses(req, res, next) {
     res.on("finish", () => {
         if (res.statusCode != 200) {
@@ -10,4 +11,16 @@ export function middlewareLogResponses(req, res, next) {
 export function middlewareMetricsInc(_, __, next) {
     config.fileserverHits++;
     next();
+}
+export function middlewareError(err, _, res, __) {
+    if (err instanceof ValidationError) {
+        console.error("A ValidationError occurred.");
+        res.status(400).json({ error: err.message });
+        res.end();
+    }
+    else {
+        console.error("Error occurred.");
+        res.status(500).json({ error: "Something went wrong on our end" });
+        res.end();
+    }
 }

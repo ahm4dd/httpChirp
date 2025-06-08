@@ -1,4 +1,5 @@
 import { Response, Request, NextFunction } from "express";
+import { ValidationError } from "./../errors.js";
 export async function handlerValidateChirp(
   req: Request,
   res: Response,
@@ -10,7 +11,7 @@ export async function handlerValidateChirp(
     };
     const params: parameters = req.body;
     if (params.body.length > 140) {
-      throw Error();
+      throw new ValidationError("Chirp is too long. Max length is 140");
     } else {
       params.body = params.body.trim();
       let profane: string[] = ["kerfuffle", "sharbert", "fornax"];

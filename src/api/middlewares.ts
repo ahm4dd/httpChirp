@@ -1,5 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 import { config } from "./../config.js";
+import { ValidationError } from "./../errors.js";
 
 export function middlewareLogResponses(
   req: Request,
@@ -27,11 +28,17 @@ export function middlewareMetricsInc(
 
 export function middlewareError(
   err: Error,
-  req: Request,
+  _: Request,
   res: Response,
-  next: NextFunction,
+  __: NextFunction,
 ) {
-  console.error("Error occurred.");
-  res.status(500).json({ error: "Something went wrong on our end" });
-  res.end();
+  if (err instanceof ValidationError) {
+    console.error("A ValidationError occurred.");
+    res.status(400).json({ error: err.message });
+    res.end();
+  } else {
+    console.error("Error occurred.");
+    res.status(500).json({ error: "Something went wrong on our end" });
+    res.end();
+  }
 }
