@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 import { config } from "./../config.js";
 
-export async function middlewareLogResponses(
+export function middlewareLogResponses(
   req: Request,
   res: Response,
   next: NextFunction,
@@ -16,9 +16,9 @@ export async function middlewareLogResponses(
   next();
 }
 
-export async function middlewareMetricsInc(
-  req: Request,
-  res: Response,
+export function middlewareMetricsInc(
+  _: Request,
+  __: Response,
   next: NextFunction,
 ) {
   config.fileserverHits++;

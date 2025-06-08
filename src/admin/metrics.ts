@@ -5,10 +5,14 @@ export async function handlerMetrics(
   res: Response,
   next: NextFunction,
 ) {
-  res.set("Content-Type", "text/html; charset=utf-8");
-  res.send(
-    `<html><body><h1>Welcome, Chirpy Admin</h1><p>Chirpy has been visited ${config.fileserverHits} times!</p></body></html>`,
-  );
-  res.end();
-  next();
+  try {
+    res.set("Content-Type", "text/html; charset=utf-8");
+    res.send(
+      `<html><body><h1>Welcome, Chirpy Admin</h1><p>Chirpy has been visited ${config.fileserverHits} times!</p></body></html>`,
+    );
+    res.end();
+    next();
+  } catch (err) {
+    next(err);
+  }
 }

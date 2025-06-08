@@ -1,5 +1,5 @@
 import { config } from "./../config.js";
-export async function middlewareLogResponses(req, res, next) {
+export function middlewareLogResponses(req, res, next) {
     res.on("finish", () => {
         if (res.statusCode != 200) {
             console.log(`[NON-OK] ${req.method} ${req.url} - Status: ${res.statusCode}`);
@@ -7,7 +7,7 @@ export async function middlewareLogResponses(req, res, next) {
     });
     next();
 }
-export async function middlewareMetricsInc(req, res, next) {
+export function middlewareMetricsInc(_, __, next) {
     config.fileserverHits++;
     next();
 }
