@@ -1,6 +1,10 @@
 import process from "process";
 process.loadEnvFile();
+const migrationConfig = {
+    migrationsFolder: "src/db/drizzle/",
+};
 export const config = {
     fileserverHits: 0,
-    dbURL: process.env.DB_URL,
+    db: { dbURL: process.env.DB_URL, migrationConfig: migrationConfig },
+    platform: process.env.PLATFORM,
 };
