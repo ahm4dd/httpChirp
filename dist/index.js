@@ -4,13 +4,14 @@ import { middlewareError, middlewareLogResponses, middlewareMetricsInc, } from "
 import { handlerMetrics } from "./admin/metrics.js";
 import { handlerReset } from "./admin/reset.js";
 import { handlerCreateUsers } from "./api/users.js";
-import { handlerCreateChirp } from "./api/chirps.js";
+import { handlerCreateChirp, handlerGetAllChirps } from "./api/chirps.js";
 const app = express();
 const PORT = 8080;
 app.use(express.json());
 app.use("/app", middlewareMetricsInc, express.static("./src/app"));
 app.get("/admin/metrics", handlerMetrics);
 app.get("/api/healthz", handlerReadiness);
+app.get("/api/chirps", handlerGetAllChirps);
 //app.get("/admin/metrics");
 app.post("/admin/reset", handlerReset);
 app.post("/api/users", handlerCreateUsers);

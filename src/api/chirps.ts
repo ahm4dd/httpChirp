@@ -1,6 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 import { ValidationError } from "./../errors.js";
-import { createChirp } from "./../db/queries/chirps.js";
+import { createChirp, getAllChirps } from "./../db/queries/chirps.js";
+
 export async function handlerCreateChirp(
   req: Request,
   res: Response,
@@ -34,6 +35,20 @@ export async function handlerCreateChirp(
       res.status(201).json(chirp);
       res.end();
     }
+  } catch (err) {
+    next(err);
+  }
+}
+
+export async function handlerGetAllChirps(
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) {
+  try {
+    const chirps = await getAllChirps();
+    res.json(chirps);
+    res.end();
   } catch (err) {
     next(err);
   }
