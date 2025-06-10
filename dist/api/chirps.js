@@ -1,5 +1,5 @@
 import { ValidationError } from "./../errors.js";
-import { createChirp, getAllChirps } from "./../db/queries/chirps.js";
+import { createChirp, getAllChirps, getChirpById, } from "./../db/queries/chirps.js";
 export async function handlerCreateChirp(req, res, next) {
     try {
         if (!("body" in req.body) || !("userId" in req.body)) {
@@ -38,6 +38,21 @@ export async function handlerGetAllChirps(req, res, next) {
         const chirps = await getAllChirps();
         res.json(chirps);
         res.end();
+    }
+    catch (err) {
+        next(err);
+    }
+}
+export async function handlerGetChirp(req, res, next) {
+    try {
+        try {
+            const chirp = await getChirpById(req.params.chirpID);
+            res.json(chirp);
+            res.end();
+        }
+        catch (err) {
+            throw new ValidationError("Chirp does not exist");
+        }
     }
     catch (err) {
         next(err);
