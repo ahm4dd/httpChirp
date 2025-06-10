@@ -1,5 +1,5 @@
 import { config } from "./../config.js";
-import { ValidationError } from "./../errors.js";
+import { AuthorizationError, ValidationError } from "./../errors.js";
 export function middlewareLogResponses(req, res, next) {
     res.on("finish", () => {
         if (res.statusCode != 200) {
@@ -16,6 +16,11 @@ export function middlewareError(err, _, res, __) {
     if (err instanceof ValidationError) {
         console.error("A ValidationError occurred.");
         res.status(400).json({ error: err.message });
+        res.end();
+    }
+    else if (err instanceof AuthorizationError) {
+        console.log("An AuthorizationError occurred.");
+        res.status(401).json({ error: err.message });
         res.end();
     }
     else {

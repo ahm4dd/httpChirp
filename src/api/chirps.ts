@@ -45,7 +45,7 @@ export async function handlerCreateChirp(
 }
 
 export async function handlerGetAllChirps(
-  req: Request,
+  _: Request,
   res: Response,
   next: NextFunction,
 ) {

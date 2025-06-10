@@ -15,6 +15,13 @@
       "when": 1749433977744,
       "tag": "0001_fantastic_leo",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1749525469489,
+      "tag": "0002_married_wonder_man",
+      "breakpoints": true
     }
   ]
 }

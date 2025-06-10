@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 import { config } from "./../config.js";
-import { ValidationError } from "./../errors.js";
+import { AuthorizationError, ValidationError } from "./../errors.js";
 
 export function middlewareLogResponses(
   req: Request,
@@ -35,6 +35,10 @@ export function middlewareError(
   if (err instanceof ValidationError) {
     console.error("A ValidationError occurred.");
     res.status(400).json({ error: err.message });
+    res.end();
+  } else if (err instanceof AuthorizationError) {
+    console.log("An AuthorizationError occurred.");
+    res.status(401).json({ error: err.message });
     res.end();
   } else {
     console.error("Error occurred.");

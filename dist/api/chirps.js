@@ -33,7 +33,7 @@ export async function handlerCreateChirp(req, res, next) {
         next(err);
     }
 }
-export async function handlerGetAllChirps(req, res, next) {
+export async function handlerGetAllChirps(_, res, next) {
     try {
         const chirps = await getAllChirps();
         res.json(chirps);

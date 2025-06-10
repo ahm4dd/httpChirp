@@ -3,3 +3,8 @@ export class ValidationError extends Error {
         super(message);
     }
 }
+export class AuthorizationError extends Error {
+    constructor(message) {
+        super(message);
+    }
+}
