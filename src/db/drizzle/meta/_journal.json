@@ -8,6 +8,13 @@
       "when": 1749352188760,
       "tag": "0000_stale_odin",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1749433977744,
+      "tag": "0001_fantastic_leo",
+      "breakpoints": true
     }
   ]
 }

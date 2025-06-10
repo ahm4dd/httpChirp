@@ -15,12 +15,7 @@ export async function handlerCreateUsers(
       };
       const params: parameters = req.body;
       const user = await createUser({ email: params.email });
-      res.status(201).json({
-        id: user.id,
-        createdAt: user.createdAt,
-        updatedAt: user.createdAt,
-        email: user.email,
-      });
+      res.status(201).json(user);
       res.end();
     }
   } catch (err) {

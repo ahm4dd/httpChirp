@@ -1,13 +1,18 @@
-import { Response, Request, NextFunction } from "express";
+import { NextFunction, Request, Response } from "express";
 import { ValidationError } from "./../errors.js";
-export async function handlerValidateChirp(
+import { createChirp } from "./../db/queries/chirps.js";
+export async function handlerCreateChirp(
   req: Request,
   res: Response,
   next: NextFunction,
 ) {
   try {
+    if (!("body" in req.body) || !("userId" in req.body)) {
+      throw new ValidationError("No body or userId included in the request");
+    }
     type parameters = {
       body: string;
+      userId: string;
     };
     const params: parameters = req.body;
     if (params.body.length > 140) {
@@ -22,9 +27,11 @@ export async function handlerValidateChirp(
           filteredWords.push(asterisks);
         } else filteredWords.push(word);
       }
-      res
-        .status(200)
-        .send(JSON.stringify({ cleanedBody: filteredWords.join(" ") }));
+      const chirp = await createChirp({
+        body: filteredWords.join(" "),
+        userId: params.userId,
+      });
+      res.status(201).json(chirp);
       res.end();
     }
   } catch (err) {
