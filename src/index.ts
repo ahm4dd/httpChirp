@@ -14,6 +14,8 @@ import {
   handlerGetChirp,
 } from "./api/chirps.js";
 import { handlerLogin } from "./api/login.js";
+import { handlerRefresh } from "./api/refresh.js";
+import { handlerRevoke } from "./api/revoke.js";
 
 const app = express();
 const PORT = 8080;
@@ -28,6 +30,8 @@ app.post("/admin/reset", handlerReset);
 app.post("/api/users", handlerCreateUsers);
 app.post("/api/chirps", handlerCreateChirp);
 app.post("/api/login", handlerLogin);
+app.post("/api/refresh", handlerRefresh);
+app.post("/api/revoke", handlerRevoke);
 app.use(middlewareLogResponses);
 
 app.use(middlewareError);

@@ -1,20 +1,20 @@
-import { ValidationError } from "./../errors.js";
+import { AuthorizationError, ValidationError } from "./../errors.js";
 import { createChirp, getAllChirps, getChirpById, } from "./../db/queries/chirps.js";
 import { validateJWT, getBearerToken } from "../security/auth.js";
 import { config } from "../config.js";
 export async function handlerCreateChirp(req, res, next) {
     try {
         if (!("body" in req.body)) {
-            throw new ValidationError("No body or userId included in the request");
+            throw new AuthorizationError("No body included in the request");
         }
         const token = getBearerToken(req);
         if (!token) {
-            throw new ValidationError("No token provided!");
+            throw new AuthorizationError("No token provided!");
         }
         const params = req.body;
         const userId = validateJWT(token, config.serverApi);
         if (userId === "") {
-            throw new ValidationError("Invalid token!");
+            throw new AuthorizationError("Invalid token!");
         }
         if (params.body.length > 140) {
             throw new ValidationError("Chirp is too long. Max length is 140");

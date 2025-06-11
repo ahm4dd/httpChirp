@@ -1,8 +1,9 @@
 import bcrypt from "bcrypt";
 import { JwtPayload } from "jsonwebtoken";
 import jwt from "jsonwebtoken";
-import { ValidationError } from "../errors.js";
+import { AuthorizationError, ValidationError } from "../errors.js";
 import { Request } from "express";
+import crypto from "node:crypto";
 
 const SALT_ROUNDS = 10;
 
@@ -34,13 +35,18 @@ export function validateJWT(tokenString: string, secret: string): string {
     let decoded = jwt.verify(tokenString, secret);
     return decoded.sub as string;
   } catch (err) {
-    throw new ValidationError("Invalid token!");
+    throw new AuthorizationError("Invalid token!");
   }
 }
 
 export function getBearerToken(req: Request): string {
   const authHeader = req.headers.authorization;
-  if (!authHeader) throw new ValidationError("No token provided!");
-  const token = authHeader.split(" ")[1];
+  if (!authHeader) throw new ValidationError("No token provided");
+  const token = authHeader.replace("Bearer ", "");
+  if (!token) throw new ValidationError("No token provided");
   return token;
+}
+
+export function makeRefreshToken() {
+  return crypto.randomBytes(32).toString("hex");
 }

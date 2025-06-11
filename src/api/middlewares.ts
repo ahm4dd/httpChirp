@@ -32,17 +32,20 @@ export function middlewareError(
   res: Response,
   __: NextFunction,
 ) {
+  let statusCode = 500;
+  let message = "Something went wrong on our end";
+
   if (err instanceof ValidationError) {
-    console.error("A ValidationError occurred.");
-    res.status(400).json({ error: err.message });
-    res.end();
+    statusCode = 400;
+    message = err.message;
   } else if (err instanceof AuthorizationError) {
-    console.log("An AuthorizationError occurred.");
-    res.status(401).json({ error: err.message });
-    res.end();
-  } else {
-    console.error("Error occurred.");
-    res.status(500).json({ error: "Something went wrong on our end" });
-    res.end();
+    statusCode = 401;
+    message = err.message;
   }
+  if (statusCode >= 500) {
+    console.log(err.message);
+  }
+
+  res.status(statusCode).json({ error: err.message });
+  res.end();
 }
