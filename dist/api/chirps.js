@@ -1,11 +1,21 @@
 import { ValidationError } from "./../errors.js";
 import { createChirp, getAllChirps, getChirpById, } from "./../db/queries/chirps.js";
+import { validateJWT, getBearerToken } from "../security/auth.js";
+import { config } from "../config.js";
 export async function handlerCreateChirp(req, res, next) {
     try {
-        if (!("body" in req.body) || !("userId" in req.body)) {
+        if (!("body" in req.body)) {
             throw new ValidationError("No body or userId included in the request");
         }
+        const token = getBearerToken(req);
+        if (!token) {
+            throw new ValidationError("No token provided!");
+        }
         const params = req.body;
+        const userId = validateJWT(token, config.serverApi);
+        if (userId === "") {
+            throw new ValidationError("Invalid token!");
+        }
         if (params.body.length > 140) {
             throw new ValidationError("Chirp is too long. Max length is 140");
         }
@@ -23,7 +33,7 @@ export async function handlerCreateChirp(req, res, next) {
             }
             const chirp = await createChirp({
                 body: filteredWords.join(" "),
-                userId: params.userId,
+                userId: userId,
             });
             res.status(201).json(chirp);
             res.end();

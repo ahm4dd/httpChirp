@@ -1,9 +1,10 @@
 import { param } from "drizzle-orm";
 import { Response, Request, NextFunction } from "express";
-import { checkPasswordHash } from "../security/auth.js";
+import { checkPasswordHash, makeJWT } from "../security/auth.js";
 import { getUserByEmail } from "./../db/queries/users.js";
 import { NewUser } from "./../db/schema.js";
 import { AuthorizationError } from "./../errors.js";
+import { config } from "./../config.js";
 
 export async function handlerLogin(
   req: Request,
@@ -14,6 +15,7 @@ export async function handlerLogin(
     type Parameters = {
       email: string;
       password: string;
+      expiresInSeconds?: number;
     };
     const params: Parameters = req.body;
     try {
@@ -22,7 +24,11 @@ export async function handlerLogin(
       if (!checkPasswordHash(params.password, user.hashedPassword))
         throw new AuthorizationError("Wrong password!");
       const noPasswordUser: Omit<NewUser, "hashedPassword"> = user;
-      res.status(200).json(noPasswordUser);
+      const expiresInSeconds = params.expiresInSeconds ?? 3600;
+      res.status(200).json({
+        ...noPasswordUser,
+        token: makeJWT(user.id, expiresInSeconds, config.serverApi),
+      });
       res.end();
     } catch (err) {
       next(err);

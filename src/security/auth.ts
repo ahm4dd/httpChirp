@@ -2,6 +2,7 @@ import bcrypt from "bcrypt";
 import { JwtPayload } from "jsonwebtoken";
 import jwt from "jsonwebtoken";
 import { ValidationError } from "../errors.js";
+import { Request } from "express";
 
 const SALT_ROUNDS = 10;
 
@@ -35,4 +36,11 @@ export function validateJWT(tokenString: string, secret: string): string {
   } catch (err) {
     throw new ValidationError("Invalid token!");
   }
+}
+
+export function getBearerToken(req: Request): string {
+  const authHeader = req.headers.authorization;
+  if (!authHeader) throw new ValidationError("No token provided!");
+  const token = authHeader.split(" ")[1];
+  return token;
 }

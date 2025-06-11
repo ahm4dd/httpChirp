@@ -1,6 +1,6 @@
 import { createUser } from "./../db/queries/users.js";
 import { ValidationError } from "./../errors.js";
-import { hashPassword } from "./../db/auth.js";
+import { hashPassword } from "../security/auth.js";
 export async function handlerCreateUsers(req, res, next) {
     try {
         if (!("email" in req.body) || !("password" in req.body)) {

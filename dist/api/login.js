@@ -1,6 +1,7 @@
-import { checkPasswordHash } from "./../db/auth.js";
+import { checkPasswordHash, makeJWT } from "../security/auth.js";
 import { getUserByEmail } from "./../db/queries/users.js";
 import { AuthorizationError } from "./../errors.js";
+import { config } from "./../config.js";
 export async function handlerLogin(req, res, next) {
     try {
         const params = req.body;
@@ -11,7 +12,11 @@ export async function handlerLogin(req, res, next) {
             if (!checkPasswordHash(params.password, user.hashedPassword))
                 throw new AuthorizationError("Wrong password!");
             const noPasswordUser = user;
-            res.status(200).json(noPasswordUser);
+            const expiresInSeconds = params.expiresInSeconds ?? 3600;
+            res.status(200).json({
+                ...noPasswordUser,
+                token: makeJWT(user.id, expiresInSeconds, config.serverApi),
+            });
             res.end();
         }
         catch (err) {

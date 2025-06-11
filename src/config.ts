@@ -6,6 +6,7 @@ type APIConfig = {
   fileserverHits: number;
   db: DBConfig;
   platform: string;
+  serverApi: string;
 };
 
 export type DBConfig = {
@@ -21,4 +22,5 @@ export const config: APIConfig = {
   fileserverHits: 0,
   db: { dbURL: process.env.DB_URL!, migrationConfig: migrationConfig },
   platform: process.env.PLATFORM!,
+  serverApi: process.env.SERVER_API!,
 };
