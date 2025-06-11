@@ -1,6 +1,6 @@
 import { param } from "drizzle-orm";
 import { Response, Request, NextFunction } from "express";
-import { checkPasswordHash } from "./../db/auth.js";
+import { checkPasswordHash } from "../security/auth.js";
 import { getUserByEmail } from "./../db/queries/users.js";
 import { NewUser } from "./../db/schema.js";
 import { AuthorizationError } from "./../errors.js";
