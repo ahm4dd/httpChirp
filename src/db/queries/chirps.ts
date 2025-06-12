@@ -23,3 +23,11 @@ export async function getChirpById(id: string) {
     .where(sql`${chirps.id} = ${id}`);
   return result;
 }
+
+export async function deleteChirpById(id: string) {
+  const [result] = await db
+    .delete(chirps)
+    .where(sql`${chirps.id} = ${id}`)
+    .returning();
+  return result;
+}

@@ -8,3 +8,13 @@ export class AuthorizationError extends Error {
         super(message);
     }
 }
+export class PermissionError extends Error {
+    constructor(message) {
+        super(message);
+    }
+}
+export class NotFoundError extends Error {
+    constructor(message) {
+        super(message);
+    }
+}

@@ -1,9 +1,15 @@
 import { NextFunction, Request, Response } from "express";
-import { AuthorizationError, ValidationError } from "./../errors.js";
+import {
+  AuthorizationError,
+  ValidationError,
+  PermissionError,
+  NotFoundError,
+} from "./../errors.js";
 import {
   createChirp,
   getAllChirps,
   getChirpById,
+  deleteChirpById,
 } from "./../db/queries/chirps.js";
 import { validateJWT, getBearerToken } from "../security/auth.js";
 import { config } from "../config.js";
@@ -73,14 +79,43 @@ export async function handlerGetChirp(
   next: NextFunction,
 ) {
   try {
-    try {
-      const chirp = await getChirpById(req.params.chirpID);
-
-      res.json(chirp);
-      res.end();
-    } catch (err) {
-      throw new ValidationError("Chirp does not exist");
+    const chirp = await getChirpById(req.params.chirpID);
+    if (!chirp) {
+      throw new NotFoundError("Chirp does not exist");
     }
+    res.json(chirp);
+    res.end();
+  } catch (err) {
+    next(err);
+  }
+}
+
+export async function handlerDeleteChirp(
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) {
+  try {
+    const token = getBearerToken(req);
+    if (!token) {
+      throw new AuthorizationError("No token provided!");
+    }
+    const userId = validateJWT(token, config.serverApi);
+    if (userId === "") {
+      throw new AuthorizationError("Invalid token!");
+    }
+    const chirp = await getChirpById(req.params.chirpID);
+    if (!chirp) {
+      throw new NotFoundError("Chirp does not exist");
+    }
+    if (chirp.userId !== userId) {
+      throw new PermissionError(
+        "You do not have permission to delete this chirp",
+      );
+    }
+    const deletedChirp = await deleteChirpById(req.params.chirpID);
+    res.status(204).json(deletedChirp);
+    res.end();
   } catch (err) {
     next(err);
   }

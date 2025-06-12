@@ -20,3 +20,10 @@ export async function getChirpById(id) {
         .where(sql `${chirps.id} = ${id}`);
     return result;
 }
+export async function deleteChirpById(id) {
+    const [result] = await db
+        .delete(chirps)
+        .where(sql `${chirps.id} = ${id}`)
+        .returning();
+    return result;
+}

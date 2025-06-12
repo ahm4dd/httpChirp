@@ -4,7 +4,7 @@ import { middlewareError, middlewareLogResponses, middlewareMetricsInc, } from "
 import { handlerMetrics } from "./admin/metrics.js";
 import { handlerReset } from "./admin/reset.js";
 import { handlerCreateUsers, handlerUpdateUser } from "./api/users.js";
-import { handlerCreateChirp, handlerGetAllChirps, handlerGetChirp, } from "./api/chirps.js";
+import { handlerCreateChirp, handlerDeleteChirp, handlerGetAllChirps, handlerGetChirp, } from "./api/chirps.js";
 import { handlerLogin } from "./api/login.js";
 import { handlerRefresh } from "./api/refresh.js";
 import { handlerRevoke } from "./api/revoke.js";
@@ -24,6 +24,7 @@ app.post("/api/login", handlerLogin);
 app.post("/api/refresh", handlerRefresh);
 app.post("/api/revoke", handlerRevoke);
 app.put("/api/users", handlerUpdateUser);
+app.delete("/api/chirps/:chirpID", handlerDeleteChirp);
 app.use(middlewareLogResponses);
 app.use(middlewareError);
 app.listen(PORT, () => {

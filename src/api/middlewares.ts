@@ -1,6 +1,11 @@
 import { NextFunction, Request, Response } from "express";
 import { config } from "./../config.js";
-import { AuthorizationError, ValidationError } from "./../errors.js";
+import {
+  AuthorizationError,
+  NotFoundError,
+  PermissionError,
+  ValidationError,
+} from "./../errors.js";
 
 export function middlewareLogResponses(
   req: Request,
@@ -41,7 +46,14 @@ export function middlewareError(
   } else if (err instanceof AuthorizationError) {
     statusCode = 401;
     message = err.message;
+  } else if (err instanceof PermissionError) {
+    statusCode = 403;
+    message = err.message;
+  } else if (err instanceof NotFoundError) {
+    statusCode = 404;
+    message = err.message;
   }
+
   if (statusCode >= 500) {
     console.log(err.message);
   }

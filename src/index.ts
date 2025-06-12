@@ -10,6 +10,7 @@ import { handlerReset } from "./admin/reset.js";
 import { handlerCreateUsers, handlerUpdateUser } from "./api/users.js";
 import {
   handlerCreateChirp,
+  handlerDeleteChirp,
   handlerGetAllChirps,
   handlerGetChirp,
 } from "./api/chirps.js";
@@ -34,6 +35,8 @@ app.post("/api/refresh", handlerRefresh);
 app.post("/api/revoke", handlerRevoke);
 
 app.put("/api/users", handlerUpdateUser);
+
+app.delete("/api/chirps/:chirpID", handlerDeleteChirp);
 
 app.use(middlewareLogResponses);
 

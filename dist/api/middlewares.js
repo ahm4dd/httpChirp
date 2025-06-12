@@ -1,5 +1,5 @@
 import { config } from "./../config.js";
-import { AuthorizationError, ValidationError } from "./../errors.js";
+import { AuthorizationError, NotFoundError, PermissionError, ValidationError, } from "./../errors.js";
 export function middlewareLogResponses(req, res, next) {
     res.on("finish", () => {
         if (res.statusCode != 200) {
@@ -21,6 +21,14 @@ export function middlewareError(err, _, res, __) {
     }
     else if (err instanceof AuthorizationError) {
         statusCode = 401;
+        message = err.message;
+    }
+    else if (err instanceof PermissionError) {
+        statusCode = 403;
+        message = err.message;
+    }
+    else if (err instanceof NotFoundError) {
+        statusCode = 404;
         message = err.message;
     }
     if (statusCode >= 500) {
