@@ -41,9 +41,9 @@ export function validateJWT(tokenString: string, secret: string): string {
 
 export function getBearerToken(req: Request): string {
   const authHeader = req.headers.authorization;
-  if (!authHeader) throw new ValidationError("No token provided");
+  if (!authHeader) throw new AuthorizationError("No token provided");
   const token = authHeader.replace("Bearer ", "");
-  if (!token) throw new ValidationError("No token provided");
+  if (!token) throw new AuthorizationError("No token provided");
   return token;
 }
 

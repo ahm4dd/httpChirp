@@ -19,3 +19,18 @@ export async function getUserByEmail(email) {
         .where(sql `${users.email} = ${email}`);
     return result;
 }
+export async function getUserById(id) {
+    const [result] = await db
+        .select()
+        .from(users)
+        .where(sql `${users.id} = ${id}`);
+    return result;
+}
+export async function updateUser(user) {
+    const [result] = await db
+        .update(users)
+        .set({ hashedPassword: user.hashedPassword, email: user.email })
+        .where(sql `${users.id} = ${user.id}`)
+        .returning();
+    return result;
+}

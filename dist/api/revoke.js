@@ -5,7 +5,7 @@ export async function handlerRevoke(req, res, next) {
     try {
         const refreshToken = getBearerToken(req);
         if (!refreshToken) {
-            throw new AuthorizationError("Invalid token provided to refresh");
+            throw new AuthorizationError("Invalid token provided to revoke");
         }
         else {
             await revokeRefreshToken(refreshToken);

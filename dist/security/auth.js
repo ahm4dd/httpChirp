@@ -1,6 +1,6 @@
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
-import { AuthorizationError, ValidationError } from "../errors.js";
+import { AuthorizationError } from "../errors.js";
 import crypto from "node:crypto";
 const SALT_ROUNDS = 10;
 export function hashPassword(password) {
@@ -30,10 +30,10 @@ export function validateJWT(tokenString, secret) {
 export function getBearerToken(req) {
     const authHeader = req.headers.authorization;
     if (!authHeader)
-        throw new ValidationError("No token provided");
+        throw new AuthorizationError("No token provided");
     const token = authHeader.replace("Bearer ", "");
     if (!token)
-        throw new ValidationError("No token provided");
+        throw new AuthorizationError("No token provided");
     return token;
 }
 export function makeRefreshToken() {

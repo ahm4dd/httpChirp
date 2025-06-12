@@ -7,7 +7,7 @@ import {
 } from "./api/middlewares.js";
 import { handlerMetrics } from "./admin/metrics.js";
 import { handlerReset } from "./admin/reset.js";
-import { handlerCreateUsers } from "./api/users.js";
+import { handlerCreateUsers, handlerUpdateUser } from "./api/users.js";
 import {
   handlerCreateChirp,
   handlerGetAllChirps,
@@ -32,6 +32,9 @@ app.post("/api/chirps", handlerCreateChirp);
 app.post("/api/login", handlerLogin);
 app.post("/api/refresh", handlerRefresh);
 app.post("/api/revoke", handlerRevoke);
+
+app.put("/api/users", handlerUpdateUser);
+
 app.use(middlewareLogResponses);
 
 app.use(middlewareError);
