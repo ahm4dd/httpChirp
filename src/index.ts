@@ -17,6 +17,7 @@ import {
 import { handlerLogin } from "./api/login.js";
 import { handlerRefresh } from "./api/refresh.js";
 import { handlerRevoke } from "./api/revoke.js";
+import { handlerWebhooks } from "./api/polka/webhooks.js";
 
 const app = express();
 const PORT = 8080;
@@ -33,6 +34,7 @@ app.post("/api/chirps", handlerCreateChirp);
 app.post("/api/login", handlerLogin);
 app.post("/api/refresh", handlerRefresh);
 app.post("/api/revoke", handlerRevoke);
+app.post("/api/polka/webhooks", handlerWebhooks);
 
 app.put("/api/users", handlerUpdateUser);
 
