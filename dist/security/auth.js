@@ -39,3 +39,12 @@ export function getBearerToken(req) {
 export function makeRefreshToken() {
     return crypto.randomBytes(32).toString("hex");
 }
+export function getAPIkey(req) {
+    const authHeader = req.headers.authorization;
+    if (!authHeader)
+        throw new AuthorizationError("No API key provided");
+    const apiKey = authHeader.replace("ApiKey ", "");
+    if (!apiKey)
+        throw new AuthorizationError("No API key provided");
+    return apiKey;
+}

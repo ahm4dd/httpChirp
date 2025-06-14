@@ -43,9 +43,13 @@ export async function handlerCreateChirp(req, res, next) {
         next(err);
     }
 }
-export async function handlerGetAllChirps(_, res, next) {
+export async function handlerGetAllChirps(req, res, next) {
     try {
-        const chirps = await getAllChirps();
+        let chirps;
+        if (req.query.authorId && typeof req.query.authorId === "string")
+            chirps = await getAllChirps(req.query.authorId);
+        else
+            chirps = await getAllChirps();
         res.json(chirps);
         res.end();
     }

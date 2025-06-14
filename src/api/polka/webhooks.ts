@@ -1,6 +1,8 @@
 import { Request, Response, NextFunction } from "express";
 import { updateIsChirpyRedById } from "./../../db/queries/users.js";
-import { NotFoundError } from "./../../errors.js";
+import { NotFoundError, AuthorizationError } from "./../../errors.js";
+import { getAPIkey } from "./../../security/auth.js";
+import { config } from "./../../config.js";
 
 export async function handlerWebhooks(
   req: Request,
@@ -8,6 +10,10 @@ export async function handlerWebhooks(
   next: NextFunction,
 ) {
   try {
+    const apiKey = getAPIkey(req);
+    if (apiKey !== config.polkaKey) {
+      throw new AuthorizationError("Invalid API key");
+    }
     type Parameters = {
       event: string;
       data: {

@@ -13,6 +13,7 @@ import {
 } from "./../db/queries/chirps.js";
 import { validateJWT, getBearerToken } from "../security/auth.js";
 import { config } from "../config.js";
+import { NewChirp } from "src/db/schema.js";
 
 export async function handlerCreateChirp(
   req: Request,
@@ -60,12 +61,15 @@ export async function handlerCreateChirp(
 }
 
 export async function handlerGetAllChirps(
-  _: Request,
+  req: Request,
   res: Response,
   next: NextFunction,
 ) {
   try {
-    const chirps = await getAllChirps();
+    let chirps: NewChirp[];
+    if (req.query.authorId && typeof req.query.authorId === "string")
+      chirps = await getAllChirps(req.query.authorId);
+    else chirps = await getAllChirps();
     res.json(chirps);
     res.end();
   } catch (err) {
