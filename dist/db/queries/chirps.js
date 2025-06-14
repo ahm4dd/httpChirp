@@ -9,18 +9,13 @@ export async function createChirp(chirp) {
         .returning();
     return result;
 }
-export async function getAllChirps(authorId) {
-    if (authorId) {
-        const result = await db
-            .select()
-            .from(chirps)
-            .where(sql `${chirps.userId} = ${authorId}`);
-        return result;
-    }
-    else {
-        const result = await db.select().from(chirps).orderBy(chirps.createdAt);
-        return result;
-    }
+export async function getAllChirps(authorId, sort = "asc") {
+    const query = db.select().from(chirps);
+    const filteredQuery = authorId
+        ? query.where(sql `${chirps.userId} = ${authorId}`)
+        : query;
+    const result = await filteredQuery.orderBy(sql `${chirps.createdAt} ${sql.raw(sort)}`);
+    return result;
 }
 export async function getChirpById(id) {
     const [result] = await db

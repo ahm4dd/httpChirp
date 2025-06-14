@@ -66,10 +66,9 @@ export async function handlerGetAllChirps(
   next: NextFunction,
 ) {
   try {
-    let chirps: NewChirp[];
-    if (req.query.authorId && typeof req.query.authorId === "string")
-      chirps = await getAllChirps(req.query.authorId);
-    else chirps = await getAllChirps();
+    const authorId = req.query.authorId as string | undefined;
+    const sort = req.query.sort as "asc" | "desc" | undefined;
+    const chirps = await getAllChirps(authorId, sort);
     res.json(chirps);
     res.end();
   } catch (err) {
